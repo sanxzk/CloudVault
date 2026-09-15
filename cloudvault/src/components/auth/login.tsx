@@ -1,5 +1,18 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link as RouterLink } from 'react-router-dom';
+import {
+  Box,
+  Paper,
+  TextField,
+  Button,
+  Typography,
+  Alert,
+  Link,
+  IconButton,
+  InputAdornment,
+} from '@mui/material';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { supabase } from '../../services/supabase';
 
 export default function LoginForm() {
@@ -28,36 +41,88 @@ export default function LoginForm() {
 
     navigate('/gallery');
   };
+  const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label htmlFor="email">Email</label>
-        <input
-          id="email"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-      </div>
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: '100vh',
+        bgcolor: 'grey.100',
+        px: 2,
+      }}
+    >
+      <Paper elevation={3} sx={{ p: 4, width: '100%', maxWidth: 400 }}>
+        <Typography variant="h5" sx={{ mb: 1, fontWeight: 600 }}>
+          CloudVault
+        </Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+          Log in to access your media
+        </Typography>
 
-      <div>
-        <label htmlFor="password">Password</label>
-        <input
-          id="password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-      </div>
+        <Box component="form" onSubmit={handleSubmit}>
+          <TextField
+            label="Email"
+            type="email"
+            fullWidth
+            required
+            margin="normal"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
 
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+         <TextField
+  label="Password"
+  type={showPassword ? 'text' : 'password'}
+  fullWidth
+  required
+  margin="normal"
+  value={password}
+  onChange={(e) => setPassword(e.target.value)}
+  slotProps={{
+    input: {
+      endAdornment: (
+        <InputAdornment position="end">
+          <IconButton
+            onClick={() => setShowPassword((prev) => !prev)}
+            edge="end"
+            aria-label={showPassword ? 'Hide password' : 'Show password'}
+          >
+            {showPassword ? <VisibilityOff /> : <Visibility />}
+          </IconButton>
+        </InputAdornment>
+      ),
+    },
+  }}
+/>
 
-      <button type="submit" disabled={loading}>
-        {loading ? 'Logging in...' : 'Log In'}
-      </button>
-    </form>
+          {error && (
+            <Alert severity="error" sx={{ mt: 2 }}>
+              {error}
+            </Alert>
+          )}
+
+          <Button
+            type="submit"
+            variant="contained"
+            fullWidth
+            size="large"
+            disabled={loading}
+            sx={{ mt: 3 }}
+          >
+            {loading ? 'Logging in...' : 'Log In'}
+          </Button>
+
+          <Typography variant="body2" sx={{ mt: 3, textAlign: 'center' }}>
+            Don't have an account?{' '}
+            <Link component={RouterLink} to="/signup">
+              Sign up
+            </Link>
+          </Typography>
+        </Box>
+      </Paper>
+    </Box>
   );
 }
