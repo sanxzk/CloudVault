@@ -1,16 +1,7 @@
-import './App.css'
-import { supabase } from './services/supabase';
-
-console.log(supabase);
+import AppRoutes from "./routes/appRoutes";
 
 function App() {
-  return (
-    <>
-    <div>
-      hi
-    </div>
-    </>
-  )
+  return <AppRoutes />;
 }
 
-export default App
+export default App;
