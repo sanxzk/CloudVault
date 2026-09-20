@@ -34,3 +34,15 @@ export async function uploadFileToS3(uploadUrl: string, file: File): Promise<voi
     throw new Error('Failed to upload file to S3');
   }
 }
+
+export async function getViewUrl(s3Key: string): Promise<string> {
+  const response = await fetch(`${API_URL}/upload-url`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ action: 'get', s3Key }),
+  });
+
+  if (!response.ok) throw new Error('Failed to get view URL');
+  const data = await response.json();
+  return data.viewUrl;
+}
