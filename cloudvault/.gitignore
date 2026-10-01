@@ -7,9 +7,11 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
+node_modules/
+dist/
+dist-ssr/
+build/
+coverage/
 *.local
 
 # Editor directories and files
@@ -27,4 +29,42 @@ dist-ssr
 .env
 .env.local
 .env.development
+.env.development.local
 .env.production
+.env.production.local
+.env.test
+.env.test.local
+
+# OS generated files
+Thumbs.db
+Desktop.ini
+
+# TypeScript
+*.tsbuildinfo
+
+# Vite
+vite.config.*.timestamp-*
+
+# Testing
+.nyc_output/
+playwright-report/
+test-results/
+coverage/
+
+# Temporary files
+*.tmp
+*.temp
+*.cache
+
+# Debug files
+*.pid
+*.seed
+*.pid.lock
+
+# Package manager
+.pnpm-debug.log*
+
+# Optional: npm package lock files
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
