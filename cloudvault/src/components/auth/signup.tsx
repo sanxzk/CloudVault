@@ -87,8 +87,10 @@ export default function SignupForm() {
               helperText="At least 6 characters"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              inputProps={{ minLength: 6 }}
               slotProps={{
+                htmlInput: {
+                  minLength: 6,
+                },
                 input: {
                   endAdornment: (
                     <InputAdornment position="end">
