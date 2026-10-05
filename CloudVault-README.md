@@ -198,39 +198,6 @@ The media metadata represented in the frontend includes:
 - `s3_key`
 - `created_at`
 
-## Project Structure
-
-```text
-.
-├── src/
-│   ├── components/
-│   │   ├── auth/
-│   │   │   ├── login.tsx
-│   │   │   └── signup.tsx
-│   │   └── gallery/
-│   │       ├── mediaCard.tsx
-│   │       ├── mediaGrid.tsx
-│   │       └── mediaViewer.tsx
-│   ├── hooks/
-│   │   └── useAuth.tsx
-│   ├── pages/
-│   │   └── gallery.tsx
-│   ├── routes/
-│   │   ├── appRoutes.tsx
-│   │   └── protectedRoutes.tsx
-│   ├── services/
-│   │   ├── mediaService.ts
-│   │   ├── supabase.ts
-│   │   └── uploadService.ts
-│   ├── App.tsx
-│   ├── App.css
-│   ├── index.css
-│   └── main.tsx
-├── docs/
-│   └── CloudVault-project.docx
-└── README.md
-```
-
 ## Important Security Concepts
 
 ### Private S3 buckets
@@ -268,6 +235,3 @@ It is intentionally kept alongside the README so that the repository contains bo
 - a quick project overview in `README.md`
 - the detailed project documentation in `docs/CloudVault-project.docx`
 
-## Notes
-
-The README is based on the supplied project documentation and the supplied source archive. The source archive did not include a `package.json`, so exact installation/build commands and dependency versions are not stated here rather than guessed.
