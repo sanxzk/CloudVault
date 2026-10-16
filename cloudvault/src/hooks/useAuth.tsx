@@ -6,9 +6,10 @@ import { supabase } from '../services/supabase';
 interface AuthContextType {
   user: User | null;
   loading: boolean;
+  isGuest: boolean;
 }
 
-const AuthContext = createContext<AuthContextType>({ user: null, loading: true });
+const AuthContext = createContext<AuthContextType>({ user: null, loading: true, isGuest: false });
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
@@ -31,8 +32,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
+  // Supabase marks users created via signInAnonymously() with is_anonymous = true
+  const isGuest = user?.is_anonymous ?? false;
+
   return (
-    <AuthContext.Provider value={{ user, loading }} >
+    <AuthContext.Provider value={{ user, loading, isGuest }} >
       {children}
     </AuthContext.Provider>
   );
