@@ -6,6 +6,7 @@ import {
   Button,
   AppBar,
   Toolbar,
+  Alert,
   CircularProgress,
 } from "@mui/material";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -19,9 +20,14 @@ import type { MediaItem } from "../services/mediaService";
 import MediaGrid from "../components/gallery/mediaGrid";
 import MediaViewer from "../components/gallery/mediaViewer";
 
+// Guests get tighter limits so a public demo can't run up storage costs
+const GUEST_MAX_FILES = 5;
+const GUEST_MAX_SIZE_MB = 10;
+const USER_MAX_SIZE_MB = 50;
+
 export default function Gallery() {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, isGuest } = useAuth();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
 
@@ -38,7 +44,13 @@ export default function Gallery() {
     const file = e.target.files?.[0];
     if (!file || !user) return;
 
-    const MAX_SIZE_MB = 50;
+    if (isGuest && mediaItems.length >= GUEST_MAX_FILES) {
+      alert(`Guest mode allows up to ${GUEST_MAX_FILES} files. Sign up for an account to upload more.`);
+      e.target.value = "";
+      return;
+    }
+
+    const MAX_SIZE_MB = isGuest ? GUEST_MAX_SIZE_MB : USER_MAX_SIZE_MB;
     const isValidType =
       file.type.startsWith("image/") || file.type.startsWith("video/");
     const isValidSize = file.size <= MAX_SIZE_MB * 1024 * 1024;
@@ -111,17 +123,24 @@ export default function Gallery() {
           <Typography variant="h6">CloudVault</Typography>
 
           <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-            <Typography variant="body2">{user?.email}</Typography>
+            <Typography variant="body2">{isGuest ? "Guest" : user?.email}</Typography>
             <Button
               color="inherit"
               startIcon={<LogoutIcon />}
               onClick={handleLogout}
             >
-              Logout
+              {isGuest ? "Exit guest mode" : "Logout"}
             </Button>
           </Box>
         </Toolbar>
       </AppBar>
+
+      {isGuest && (
+        <Alert severity="info" sx={{ borderRadius: 0 }}>
+          You're exploring CloudVault as a guest. Uploads are limited to {GUEST_MAX_FILES} files
+          (max {GUEST_MAX_SIZE_MB} MB each) and guest data may be cleared periodically.
+        </Alert>
+      )}
 
       <Box sx={{ p: 4 }}>
         <Box

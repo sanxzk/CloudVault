@@ -8,6 +8,7 @@ import {
   Typography,
   Alert,
   Link,
+  Divider,
   IconButton,
   InputAdornment,
 } from '@mui/material';
@@ -20,7 +21,25 @@ export default function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [guestLoading, setGuestLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Guest mode: creates a temporary anonymous Supabase user (no email / password / verification)
+  const handleGuestLogin = async () => {
+    setError(null);
+    setGuestLoading(true);
+
+    const { error } = await supabase.auth.signInAnonymously();
+
+    setGuestLoading(false);
+
+    if (error) {
+      setError(error.message);
+      return;
+    }
+
+    navigate('/gallery');
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -109,11 +128,30 @@ export default function LoginForm() {
             variant="contained"
             fullWidth
             size="large"
-            disabled={loading}
+            disabled={loading || guestLoading}
             sx={{ mt: 3 }}
           >
             {loading ? 'Logging in...' : 'Log In'}
           </Button>
+
+          <Divider sx={{ my: 3 }}>or</Divider>
+
+          <Button
+            variant="outlined"
+            fullWidth
+            size="large"
+            onClick={handleGuestLogin}
+            disabled={loading || guestLoading}
+          >
+            {guestLoading ? 'Entering...' : 'Continue as Guest'}
+          </Button>
+          <Typography
+            variant="caption"
+            color="text.secondary"
+            sx={{ display: 'block', mt: 1, textAlign: 'center' }}
+          >
+            No sign-up or email verification needed. Great for a quick look around.
+          </Typography>
 
           <Typography variant="body2" sx={{ mt: 3, textAlign: 'center' }}>
             Don't have an account?{' '}
